@@ -23,3 +23,39 @@ Hibernate Validator 是 JSR 380 参考实现。Hibernate Validator、Bean Valida
 2.0。
 
 Hibernate Validator 6 和 Bean Validation 2.0 需要Java8或更新版本。 
+
+# 1. 开始使用
+
+这一章节将会告诉你如何开始使用Hibernate Validator（Bean Validation的参考实现）。你需要提前准备好这些：
+
+- JDK8
+- [Apache Maven](http://maven.apache.org/)
+- 联网环境（Maven需要下载一些必要的库）
+
+## 1.1. 工程设置
+
+为了在Maven工程中使用Hibernate Validator，你只需要在*pom.xml*文件中添加下列依赖：
+
+<font color= red >内容</font>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
