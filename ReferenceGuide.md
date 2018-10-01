@@ -1,6 +1,6 @@
-Hibernate Validator 6.0.13.Final - JSR 380 Reference Implementation: Reference Guide
+# Hibernate Validator 6.0.13.Final - JSR 380 参考实现：参考文档
 
-Hibernate Validator 6.0.13.Final - JSR 380 参考实现：参考文档
+Hibernate Validator 6.0.13.Final - JSR 380 Reference Implementation: Reference Guide
 
 Hardy Ferentschik  Gunnar Morling  Guillaume Smet  2018-08-22
 
