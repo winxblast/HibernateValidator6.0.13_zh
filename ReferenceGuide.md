@@ -72,7 +72,7 @@ Section 4.1, “Default message interpolation”）。当你的应用跑在一�
 
 ### 1.1.2. CDI
 
-
+Bean Validation 使用了 CDI（Java<sup>TM</sup> EE 的上下文和依赖注入，[JSR346]()） 定义了整合点
 
 
 
