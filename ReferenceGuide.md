@@ -13,30 +13,67 @@ Hardy Ferentschik  Gunnar Morling  Guillaume Smet  2018-08-22
 
 ![avatar](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/images/application-layers.png)
 
-JSR 380 - Bean Validation 2.0 - 为了实体和方法的校验定义了元数据模型和API。默认的元数据模型是通过注解来描述的，但是也可以通过XML配
-置来重写和拓展元数据。这些API并没有限制在某一特定的应用层或者编程模型上，也没有限制在web层或持久层。而且既可以用在服务端应用，也可以用
-在类似Swing这样的客户端。
+JSR 380 - Bean Validation 2.0 - 为了实体和方法的校验定义了元数据模型和 API。默认的元数据模型是通过注解来描述的，但是也可以通过XML配
+置来重写和拓展元数据。这些 API 并没有限制在某一特定的应用层或者编程模型上，也没有限制在 web 层或持久层。而且既可以用在服务端应用，也可以用
+在类似 Swing 这样的客户端。
 
 ![avatar](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/images/application-layers2.png)
 
 Hibernate Validator 是 JSR 380 参考实现。Hibernate Validator、Bean Validation API 和 TCK 都是使用了Apache Software License 
 2.0。
 
-Hibernate Validator 6 和 Bean Validation 2.0 需要Java8或更新版本。 
+Hibernate Validator 6 和 Bean Validation 2.0 需要 Java8 或更新版本。 
 
 # 1. 开始使用
 
-这一章节将会告诉你如何开始使用Hibernate Validator（Bean Validation的参考实现）。你需要提前准备好这些：
+这一章节将会告诉你如何开始使用 Hibernate Validator（Bean Validation 的参考实现）。你需要提前准备好这些：
 
 - JDK8
 - [Apache Maven](http://maven.apache.org/)
-- 联网环境（Maven需要下载一些必要的库）
+- 联网环境（Maven 需要下载一些必要的库）
 
 ## 1.1. 工程设置
 
-为了在Maven工程中使用Hibernate Validator，你只需要在*pom.xml*文件中添加下列依赖：
+为了在 Maven 工程中使用 Hibernate Validator，你只需要在 *pom.xml* 文件中添加下列依赖：
 
-<font color= red >内容</font>
+*Example 1.1: Hibernate Validator Maven dependency*
+
+```xml
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator</artifactId>
+    <version>6.0.13.Final</version>
+</dependency>
+```
+
+这也会将它的依赖 Bean Validation API (javax.validation:validation-api:2.0.1.Final)拉下来。
+
+### 1.1.1. Unified EL 统一表达式语言
+
+Hbernate Validator 需要统一表达式语言（[JSR341](http://jcp.org/en/jsr/detail?id=341)）的实现来动态的评估违反限制的表达式（参见
+Section 4.1, “Default message interpolation”）。当你的应用跑在一个类似 JBoss AS 的 Java EE 容器中时，容器已经提供了一个EL的实
+现。但是在Java SE环境中，你需要通过在 POM 文件中添加一个依赖来自己添加 EL 的实现。例如，你可以添加以下的依赖来使用 JSR 341 [参考实
+现](https://javaee.github.io/uel-ri/):
+
+*Example 1.2: Maven dependencies for Unified EL reference implementation*
+
+```xml
+<dependency>
+    <groupId>org.glassfish</groupId>
+    <artifactId>javax.el</artifactId>
+    <version>3.0.1-b09</version>
+</dependency>
+```
+
+> 提示
+>
+> 对于那些无法提供 EL 实现的环境，Hibernate Validator提供了 [Section 12.9, “ParameterMessageInterpolator”]()。但是使用interpolator
+并不符合 Bean Validation 的规范。
+
+### 1.1.2. CDI
+
+
+
 
 
 
