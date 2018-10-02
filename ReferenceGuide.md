@@ -72,7 +72,23 @@ Section 4.1, “Default message interpolation”）。当你的应用跑在一�
 
 ### 1.1.2. CDI
 
-Bean Validation 使用了 CDI（Java<sup>TM</sup> EE 的上下文和依赖注入，[JSR346]()） 定义了整合点
+Bean Validation 使用了 CDI（Java<sup>TM</sup> EE 的上下文和依赖注入，[JSR346]()） 定义了整合点。如果你的应用所在的环境无法提供这
+个，你可以通过添加一下的 Maven 依赖，来使用使用 Hibernate Validator CDI 可移植拓展。
+
+*Example 1.3: Hibernate Validator CDI portable extension Maven dependency*
+
+```xml
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator-cdi</artifactId>
+    <version>6.0.13.Final</version>
+</dependency>
+```
+
+值得注意的是，大部分跑在 Java EE 环境上的应用是不需要添加这个依赖的。你可以在这 [Section 11.3, “CDI”]() 获取更多关于Bean Validation 
+和 CDI 整合的内容。
+ 
+### 1.1.3. 
 
 
 
