@@ -88,8 +88,44 @@ Bean Validation 使用了 CDI（Java<sup>TM</sup> EE 的上下文和依赖注入
 值得注意的是，大部分跑在 Java EE 环境上的应用是不需要添加这个依赖的。你可以在这 [Section 11.3, “CDI”]() 获取更多关于Bean Validation 
 和 CDI 整合的内容。
  
-### 1.1.3. 
+### 1.1.3. 结合安全管理器运行
 
+Hibernate Validator 支持与[安全管理器](http://docs.oracle.com/javase/8/docs/technotes/guides/security/index.html)一起启动，
+为了实现这个功能，你必须到Hibernate Validator，Bean Validation API，Classmate and JBoss Logging 和 Bean Validation的代码底层
+去分配一些许可权限。下面展示了如何通过一个加工过的 Java 默认 policy 文件 [policy file](http://docs.oracle.com/javase/8/docs/technotes/guides/security/PolicyFiles.html)
+来实现这个功能。
+
+*Example 1.4: Policy file for using Hibernate Validator with a security manager*
+
+```
+grant codeBase "file:path/to/hibernate-validator-6.0.13.Final.jar" {
+    permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+    permission java.lang.RuntimePermission "accessDeclaredMembers";
+    permission java.lang.RuntimePermission "setContextClassLoader";
+
+    permission org.hibernate.validator.HibernateValidatorPermission "accessPrivateMembers";
+
+    // Only needed when working with XML descriptors (validation.xml or XML constraint mappings)
+    permission java.util.PropertyPermission "mapAnyUriToUri", "read";
+};
+
+grant codeBase "file:path/to/validation-api-2.0.1.Final.jar" {
+    permission java.io.FilePermission "path/to/hibernate-validator-6.0.13.Final.jar", "read";
+};
+
+grant codeBase "file:path/to/jboss-logging-3.3.2.Final.jar" {
+    permission java.util.PropertyPermission "org.jboss.logging.provider", "read";
+    permission java.util.PropertyPermission "org.jboss.logging.locale", "read";
+};
+
+grant codeBase "file:path/to/classmate-1.3.4.jar" {
+    permission java.lang.RuntimePermission "accessDeclaredMembers";
+};
+
+grant codeBase "file:path/to/validation-caller-x.y.z.jar" {
+    permission org.hibernate.validator.HibernateValidatorPermission "accessPrivateMembers";
+};
+```
 
 
 
