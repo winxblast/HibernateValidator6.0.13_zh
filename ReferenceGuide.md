@@ -127,6 +127,57 @@ grant codeBase "file:path/to/validation-caller-x.y.z.jar" {
 };
 ```
 
+[WildFly 应用程序服务器](http://wildfly.org/)包含了开箱即用的 Hibernate Validator。为了升级服务器模块到最新最好的Bean Validation 
+API 和 Hibernate Validator，可以使用 WildFly 的补丁。你可以从 [SourceForge](http://sourceforge.net/projects/hibernate/files/hibernate-validator)
+上下载补丁文件，也可以使用以下依赖从 Maven 中央仓库下载。 
+
+*Example 1.5: Maven dependency for WildFly 14.0.0.Beta1 patch file*
+
+```xml
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator-modules</artifactId>
+    <version>6.0.13.Final</version>
+    <classifier>wildfly-14.0.0.Beta1-patch</classifier>
+    <type>zip</type>
+</dependency>
+```
+
+我们也为 WildFly 13.0.0.Final 提供了一个补丁：
+
+```xml
+<dependency>
+    <groupId>org.hibernate.validator</groupId>
+    <artifactId>hibernate-validator-modules</artifactId>
+    <version>6.0.13.Final</version>
+    <classifier>wildfly-13.0.0.Final-patch</classifier>
+    <type>zip</type>
+</dependency>
+```
+
+下载补丁文件后，你可以通过以下命令将它应用于 WildFly 上：
+
+*Example 1.7: Applying the WildFly patch*
+
+```
+$JBOSS_HOME/bin/jboss-cli.sh patch apply hibernate-validator-modules-6.0.13.Final-wildfly-14.0.0.Beta1-patch.zip
+```
+
+如果你想回退补丁，使用服务器提供的原生 Hibernate Validator 版本，你可以使用以下的命令：
+
+*Example 1.8: Rolling back the WildFly patch*
+
+```
+$JBOSS_HOME/bin/jboss-cli.sh patch rollback --reset-configuration=true
+```
+
+你可以在[这里](https://developer.jboss.org/wiki/SingleInstallationPatching/)
+和[这里](http://www.mastertheboss.com/jboss-server/jboss-configuration/managing-wildfly-and-eap-patches)了解到更多关于 
+WildFly 补丁的情况。
+
+### 1.1.5. 在 Java 9 上运行
+
+
 
 
 
