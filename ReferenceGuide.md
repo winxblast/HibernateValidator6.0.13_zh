@@ -177,7 +177,30 @@ WildFly 补丁的情况。
 
 ### 1.1.5. 在 Java 9 上运行
 
+Hibernate Validator 6.0.13.Final 对于 Java 9 和 Java平台模块化系统（JPMS）的支持是实验性质的。这里还没有提供 JPMS 的模块描述器
+提供，但是 Hibernate Validator 能够作为一个自动模块。
 
+以下是声明使用`Automatic-Module-Name`头的模块名：
+
+- Bean Validation API: `java.validation`
+  
+- Hibernate Validator core: `org.hibernate.validator`
+ 
+- Hibernate Validator CDI extension: `org.hibernate.validator.cdi`
+  
+- Hibernate Validator test utilities: `org.hibernate.validator.testutils`
+  
+- Hibernate Validator annotation processor: `org.hibernate.validator.annotationprocessor`
+
+这些模块名可能是暂定的，在未来版本提供真实的模块描述器时可能会改名。
+
+> 注意
+>
+> 当同时使用 Hibernate Validator 和 CDI 时，小心不要激活 JDK 的 `java.xml.ws.annotation` 模块。这个模块包含了一个有 JSR 250 API
+ （“常见注解”）的子集，但是例如有些注解 `javax.annotation.Priority` 却缺失了。这就造成了 Hibernate Validator 的方法校验拦截器不能
+ 被注册，也就是说：方法校验失效。
+>
+> 
 
 
 
