@@ -4,6 +4,7 @@ Hibernate Validator 6.0.13.Final - JSR 380 Reference Implementation: Reference G
 
 Hardy Ferentschik  Gunnar Morling  Guillaume Smet  2018-08-22
 
+[TOC]
 
 # 序言
 
@@ -11,13 +12,13 @@ Hardy Ferentschik  Gunnar Morling  Guillaume Smet  2018-08-22
 时间浪费和容易出错。为了避免进行重复的校验，开发者经常把校验逻辑写在领域模型里面，这样又将领域模型的代码和校验代码杂糅在一起，而领域模型
 应该只关乎元数据本身。
 
-![avatar](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/images/application-layers.png)
+![Alt 图片](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/images/application-layers.png)
 
 JSR 380 - Bean Validation 2.0 - 为了实体和方法的校验定义了元数据模型和 API。默认的元数据模型是通过注解来描述的，但是也可以通过XML配
 置来重写和拓展元数据。这些 API 并没有限制在某一特定的应用层或者编程模型上，也没有限制在 web 层或持久层。而且既可以用在服务端应用，也可以用
 在类似 Swing 这样的客户端。
 
-![avatar](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/images/application-layers2.png)
+![Alt 图片](https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/images/application-layers2.png)
 
 Hibernate Validator 是 JSR 380 参考实现。Hibernate Validator、Bean Validation API 和 TCK 都是使用了Apache Software License 
 2.0。
@@ -335,7 +336,28 @@ public class CarTest {
 在 `setUpValidator()` 方法中，从 `ValidatorFactory` 中取出了一个 `Validator` 对象。一个 `Validator` 实例是线程安全的，并且可以
 被多次使用。所以能把它安全的放在一个静态变量中，然后在测试方法中用它来多次校验不同的 `Car` 实例。
 
- 
+`Validate()` 方法会返回一个 `ConstraintViolation` 实例的集合，你能够遍历这个集合，来查看哪个校验错误发生了。前三个测试方法展示了一
+我们可预见的校验错误：
+
+- 在 `manufacturerIsNull()` 中 `manufacture` 违反了非空 `@NotNull` 的约束
+- 在 `licensePlateTooShort()` 中 `licensePlate` 违反了大小 `@Size` 的约束
+- 在 `seatCountTooLow()` 中 `seatCount` 违反了最小值 `@Min` 的约束
+
+如 `carIsValid()` 中所示，如果对象校验成功，那么 `validate()` 将会返回一个空集。
+
+注意到以上的代码只使用了 `javax.validation` 包中的类。这些是 Bean Validation API 提供的。没有 Hibernate Validator 中的类被直接
+使用，这让代码可移植行更好。
+
+## 1.4. 接下来会有什么？
+
+我们结束了对 Hibernate Validator 和 Bean Validation 的5分钟探索。如果需要继续查看代码例子或者看更多的例子，请参考 [第14章，更多阅读]()。
+
+如果你想要了解更多关于 bean 和属性的校验问题，请继续阅读 [第2章，声明并校验 bean 上的约束](#2)。如果你想要了解使用 Bean Validation 对
+方法进行前置或后置校验，请参考 [第3章，声明并校验方法上的约束]()。如果你想在你的应用中加上自定义的校验，你可以看看 [第6章，创造自定义约束]()。
+
+<span id="2">
+
+# 2. 声明并校验 bean 上的约束
 
 
 
