@@ -197,10 +197,145 @@ Hibernate Validator 6.0.13.Final 对于 Java 9 和 Java平台模块化系统（J
 > 注意
 >
 > 当同时使用 Hibernate Validator 和 CDI 时，小心不要激活 JDK 的 `java.xml.ws.annotation` 模块。这个模块包含了一个有 JSR 250 API
- （“常见注解”）的子集，但是例如有些注解 `javax.annotation.Priority` 却缺失了。这就造成了 Hibernate Validator 的方法校验拦截器不能
- 被注册，也就是说：方法校验失效。
+（“常见注解”）的子集，但是例如有些注解 `javax.annotation.Priority` 却缺失了。这就造成了 Hibernate Validator 的方法校验拦截器不能
+被注册，也就是说：方法校验失效。
 >
-> 
+> 可行的方法是添加完全版的 JSR 250 API 到你的模块（就是添加到classpath），例如添加 *javax.annotation:javax.annotation-api* 的
+依赖（当依赖 *org.hibernate.validator:hibernate-validator-cdi* 时，已经有可使用的 JSR 250 API 依赖了）。
+>
+> 如果你因为某些原因不得不使用 `java.xml.ws.annotation` 模块，你应该在你的 Java 中通过添加 `--patch-module java.xml.ws.annotation=/path/to/complete-jsr250-api.jar`
+来打上 API 的完全补丁。
+
+## 1.2. 使用约束
+
+让我们直接通过一个例子来看看如何使用这些约束吧。
+
+*Example 1.9: Class Car annotated with constraints*
+
+```java
+package org.hibernate.validator.referenceguide.chapter01;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+public class Car {
+
+    @NotNull
+    private String manufacturer;
+
+    @NotNull
+    @Size(min = 2, max = 14)
+    private String licensePlate;
+
+    @Min(2)
+    private int seatCount;
+
+    public Car(String manufacturer, String licencePlate, int seatCount) {
+        this.manufacturer = manufacturer;
+        this.licensePlate = licencePlate;
+        this.seatCount = seatCount;
+    }
+
+    //getters and setters ...
+}
+```
+
+注解 `@NotNull`，`@Size`，`@Min` 应该被用在 Car 类的成员变量上，用来施加以下的约束：
+
+- `manufacture` 必须非空
+- `licensePlate` 必须非空，且长度在2~14个字符之间
+- `seatCount` 最小值为2
+
+> 提示
+>
+> 你能在 GitHub 中的 Hibernate Validator 代码库中找到所有例子的完整源代码。
+
+## 1.3. 校验约束
+
+为了校验这些约束，你需要使用一个 `Validator` 实例。让我们来看一个 `Car` 的单元测试：
+
+*Example 1.10: Class CarTest showing validation examples*
+
+```java
+package org.hibernate.validator.referenceguide.chapter01;
+
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+public class CarTest {
+
+    private static Validator validator;
+
+    @BeforeClass
+    public static void setUpValidator() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
+    @Test
+    public void manufacturerIsNull() {
+        Car car = new Car( null, "DD-AB-123", 4 );
+
+        Set<ConstraintViolation<Car>> constraintViolations =
+                validator.validate( car );
+
+        assertEquals( 1, constraintViolations.size() );
+        assertEquals( "must not be null", constraintViolations.iterator().next().getMessage() );
+    }
+
+    @Test
+    public void licensePlateTooShort() {
+        Car car = new Car( "Morris", "D", 4 );
+
+        Set<ConstraintViolation<Car>> constraintViolations =
+                validator.validate( car );
+
+        assertEquals( 1, constraintViolations.size() );
+        assertEquals(
+                "size must be between 2 and 14",
+                constraintViolations.iterator().next().getMessage()
+        );
+    }
+
+    @Test
+    public void seatCountTooLow() {
+        Car car = new Car( "Morris", "DD-AB-123", 1 );
+
+        Set<ConstraintViolation<Car>> constraintViolations =
+                validator.validate( car );
+
+        assertEquals( 1, constraintViolations.size() );
+        assertEquals(
+                "must be greater than or equal to 2",
+                constraintViolations.iterator().next().getMessage()
+        );
+    }
+
+    @Test
+    public void carIsValid() {
+        Car car = new Car( "Morris", "DD-AB-123", 2 );
+
+        Set<ConstraintViolation<Car>> constraintViolations =
+                validator.validate( car );
+
+        assertEquals( 0, constraintViolations.size() );
+    }
+}
+```
+
+在 `setUpValidator()` 方法中，从 `ValidatorFactory` 中取出了一个 `Validator` 对象。一个 `Validator` 实例是线程安全的，并且可以
+被多次使用。所以能把它安全的放在一个静态变量中，然后在测试方法中用它来多次校验不同的 `Car` 实例。
+
+ 
 
 
 
