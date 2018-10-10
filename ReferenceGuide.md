@@ -4,8 +4,6 @@ Hibernate Validator 6.0.13.Final - JSR 380 Reference Implementation: Reference G
 
 Hardy Ferentschik  Gunnar Morling  Guillaume Smet  2018-08-22
 
-[TOC]
-
 # 序言
 
 数据校验功能是一个应用程序的常用功能，它发生在应用的从展示层到持久层的各个层面。我们经常会在各个层面使用相同的校验逻辑，而这样容易导致
@@ -352,10 +350,8 @@ public class CarTest {
 
 我们结束了对 Hibernate Validator 和 Bean Validation 的5分钟探索。如果需要继续查看代码例子或者看更多的例子，请参考 [第14章，更多阅读]()。
 
-如果你想要了解更多关于 bean 和属性的校验问题，请继续阅读 [第2章，声明并校验 bean 上的约束](#2)。如果你想要了解使用 Bean Validation 对
+如果你想要了解更多关于 bean 和属性的校验问题，请继续阅读 [第2章，声明并校验 bean 上的约束](#2-声明并校验-bean-上的约束)。如果你想要了解使用 Bean Validation 对
 方法进行前置或后置校验，请参考 [第3章，声明并校验方法上的约束]()。如果你想在你的应用中加上自定义的校验，你可以看看 [第6章，创造自定义约束]()。
-
-<span id="2">
 
 # 2. 声明并校验 bean 上的约束
 
